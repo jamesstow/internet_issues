@@ -6,11 +6,11 @@ The tl;dr of the script is that it hits google with an http request, times it an
 
 The script was run on my laptop while tethered to my phone
 
-The code times out after 130s
+The code times out after 130s which is why you dont get numbers any bigger
 
 The two graphs represent the time taken for said http request
 
-The ```date```  field is when the request _started_
+The ```date```  field is when the request _started_, ```took``` is in seconds
 
 Over time
 
