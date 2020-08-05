@@ -10,6 +10,8 @@ The code times out after 130s
 
 The two graphs represent the time taken for said http request
 
+The ```date```  field is when the request _started_
+
 Over time
 
 ![Over time](https://raw.githubusercontent.com/jamesstow/internet_issues/master/error_dashboard_screenshop.png)
