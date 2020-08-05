@@ -8,6 +8,18 @@ The code times out after 130s
 
 The two graphs represent the time taken for said http request
 
+Over time
+
+![Over time](https://github.com/jamesstow/internet_issues/error_dashboard_screenshop.png)
+
+An hour or so long segment
+
+![Hour segment](https://github.com/jamesstow/internet_issues/one_hour_dashboard_screenshot.png)
+
+Ookla speedtest on phone (obviously only consider the ones for ```2020-08-05```
+
+![Ookla](https://github.com/jamesstow/internet_issues/phone_speedtests.jpg)
+
 You can see some form of repeating pattern in the errored requests (just over two minute intervals)
 
 Any missing periods are when I stopped the script running
