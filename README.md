@@ -1,10 +1,14 @@
-The two graphs represent the time taken for an http request to ```https://google.com```
+# Internet issues
+
+All the data (except the mobile screenshot) is captured by the script included
+
+The tl;dr of the script is that it hits google with an http request, times it and records the result then schedules another call in 100ms
 
 The code times out after 130s
 
-You can see some form of repeating pattern in the errored requests (just over two minute intervals)
+The two graphs represent the time taken for said http request
 
-Code and captured data included. 
+You can see some form of repeating pattern in the errored requests (just over two minute intervals)
 
 Any missing periods are when I stopped the script running
 
