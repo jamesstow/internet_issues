@@ -4,6 +4,8 @@ All the data (except the mobile screenshot) is captured by the script included
 
 The tl;dr of the script is that it hits google with an http request, times it and records the result then schedules another call in 100ms
 
+The script was run on my laptop while tethered to my phone
+
 The code times out after 130s
 
 The two graphs represent the time taken for said http request
