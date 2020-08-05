@@ -1,0 +1,119 @@
+#!/usr/bin/node
+
+const https = require("https");
+const fs = require("fs");
+
+// setTimeout(()=> handle("FORCE"),2000); // for debug attaching as you cant send SIGs via a attached debugger
+
+const interval = 1000;
+const maxBufferSize = 300; // with a 1s interval this is dumping every 5m
+const dataFile = process.env["HOME"] + "/.request_data";
+const startTime = Date.now(); 
+const url = "https://google.co.uk";
+
+var state = [];
+
+const dumpStateBuffer = () => {
+	var ok = true;
+
+	if(!fs.existsSync(dataFile)) {
+		fs.writeFileSync(dataFile, "[]", (err)=>{
+			console.error("cant create empty datafile at " + dataFile);
+			process.exit(1);
+		});
+	
+	}
+
+	file = fs.readFileSync(dataFile, function(err){
+		if(err){
+			console.log("couldn't access file");
+		}
+	});
+
+	var existing = [];
+
+	try{
+		existing = JSON.parse(file);
+	}
+	catch(e){
+		console.log("error parsing json contents");
+		console.log(e);
+	}
+
+	existing = existing.concat(state);
+
+	console.log("writing findings (" + state.length + " new, " + existing.length + " total) to " + dataFile);
+
+	fs.writeFileSync(dataFile, JSON.stringify(existing), (err) => {
+		if(err){
+			console.log("failed to save file");
+			console.log(err);
+			ok = false;
+		}
+	});
+
+	const tmp = state;
+	if(ok) state = [];
+
+	return tmp;
+};
+
+var run = true;
+
+const doRequest = () => {
+	if(!run) return;
+
+	const reqStart = Date.now();
+	const date = new Date(0);
+	date.setUTCMilliseconds(reqStart);
+	
+	if(state.length >= maxBufferSize) dumpStateBuffer();
+
+	const getTook = () => {
+		const reqEnd = Date.now();
+		const took = (reqEnd - reqStart)/1000;
+
+		return took;
+	}
+
+	const finish = (result) => {
+		state.push(result);
+		console.log(result);
+		setTimeout(doRequest, 100);
+	}
+
+	https
+		.get(url, (resp) => {
+			const took = getTook()			
+			const result = {success:true, took, date};
+			finish(result);
+		})
+		.on("error", (err) => {
+			const took = getTook()			
+			const result = {success:false, took, err, date};
+			finish(result);
+		});
+	
+};
+
+setTimeout(doRequest, 1);
+
+const logState = () => {
+	const endTime = Date.now();
+	const delta = (endTime - startTime)/1000;
+
+	console.log("ran for " + delta + " seconds (start: " + startTime + ")");
+	dumpStateBuffer();
+}
+
+const handle = (signal) => {
+	console.log(signal + " signal received, killing");
+	run = false;
+	logState();
+	process.exit();
+}
+
+process.on('SIGINT', handle);
+process.on('SIGTERM', handle);
+
+process.stdin.resume();
